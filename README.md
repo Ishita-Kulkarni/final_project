@@ -1,12 +1,14 @@
-# FastAPI Calculator
+# FastAPI Calculator with Docker & PostgreSQL
 
 [![CI](https://github.com/Ishita-Kulkarni/assignment_8/workflows/FastAPI%20Calculator%20CI/badge.svg)](https://github.com/Ishita-Kulkarni/assignment_8/actions)
 [![Code Quality](https://github.com/Ishita-Kulkarni/assignment_8/workflows/Code%20Quality%20&%20Security/badge.svg)](https://github.com/Ishita-Kulkarni/assignment_8/actions)
 [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.104+-green.svg)](https://fastapi.tiangolo.com/)
 [![Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen.svg)](https://github.com/Ishita-Kulkarni/assignment_8)
+[![Docker](https://img.shields.io/badge/Docker-Enabled-blue.svg)](https://www.docker.com/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15-blue.svg)](https://www.postgresql.org/)
 
-A beautiful, interactive calculator web application built with FastAPI that performs basic arithmetic operations. Features a modern UI with real-time calculations and comprehensive API backend.
+A beautiful, interactive calculator web application built with FastAPI that performs basic arithmetic operations. Features a modern UI with real-time calculations, comprehensive API backend, and full Docker + PostgreSQL integration with pgAdmin.
 
 ## Features
 
@@ -25,14 +27,73 @@ A beautiful, interactive calculator web application built with FastAPI that perf
 - Input validation with Pydantic
 - Comprehensive logging
 
+🐳 **Docker & Database Integration**
+- Docker Compose setup with FastAPI + PostgreSQL + pgAdmin
+- PostgreSQL database for data persistence
+- pgAdmin for database management
+- Pre-configured SQL scripts for database setup
+- Multi-container orchestration
+
+## Quick Start with Docker
+
+### Prerequisites
+- Docker Desktop installed and running
+- Git
+
+### Setup
+
+1. Clone the repository:
+```bash
+git clone https://github.com/Ishita-Kulkarni/assignment_8.git
+cd assignment_8
+```
+
+2. Start all services with Docker Compose:
+```bash
+docker compose up --build
+```
+
+3. Access the services:
+   - **FastAPI Calculator**: http://localhost:8000
+   - **API Documentation**: http://localhost:8000/docs
+   - **pgAdmin**: http://localhost:5050
+   - **PostgreSQL**: localhost:5432
+
+### pgAdmin Login
+- Email: `admin@calculator.com`
+- Password: `admin`
+
+### Database Connection (in pgAdmin)
+- Host: `postgres`
+- Port: `5432`
+- Database: `calculator_db`
+- Username: `calculator_user`
+- Password: `calculator_pass`
+
+For detailed Docker setup instructions, see [DOCKER_SETUP.md](DOCKER_SETUP.md)
+
+## SQL Database Setup
+
+All SQL scripts are in the `sql/` directory:
+- `01_create_tables.sql` - Create users and calculations tables
+- `02_insert_records.sql` - Insert sample data
+- `03_query_data.sql` - Query and join operations
+- `04_update_record.sql` - Update records
+- `05_delete_record.sql` - Delete records
+- `complete_setup.sql` - Run all steps at once
+
+See [sql/README.md](sql/README.md) for detailed SQL documentation.
+
 ## Requirements
 
 - Python 3.7+
 - FastAPI
 - Uvicorn
 - Pydantic
+- Docker & Docker Compose (for containerized setup)
+- PostgreSQL 15 (via Docker)
 
-## Installation
+## Installation (Local Development)
 
 1. Create a virtual environment (recommended):
 ```bash
@@ -240,9 +301,22 @@ fastapi_calculator/
 ├── requirements-test.txt   # Test dependencies
 ├── pyproject.toml         # Pytest configuration
 ├── run_tests.sh           # Test runner script
+├── Dockerfile             # Docker container configuration
+├── docker-compose.yml     # Multi-container orchestration
+├── .env                   # Environment variables
+├── .dockerignore          # Docker build exclusions
+├── DOCKER_SETUP.md        # Docker setup guide
 ├── LOGGING.md             # Logging documentation
 ├── static/                # Static files (web interface)
 │   └── index.html         # Calculator web UI
+├── sql/                   # SQL scripts for database setup
+│   ├── README.md          # SQL documentation
+│   ├── 01_create_tables.sql    # Create database tables
+│   ├── 02_insert_records.sql   # Insert sample data
+│   ├── 03_query_data.sql       # Query examples
+│   ├── 04_update_record.sql    # Update examples
+│   ├── 05_delete_record.sql    # Delete examples
+│   └── complete_setup.sql      # Complete setup script
 ├── logs/                  # Log files directory
 │   ├── app.log            # Application logs
 │   └── error.log          # Error logs
