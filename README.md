@@ -712,7 +712,7 @@ Example platforms:
 ## Project Structure
 
 ```
-fastapi-user-management/
+assignment10/
 ├── app/                        # Application package
 │   ├── __init__.py             # Package initializer
 │   ├── main.py                 # FastAPI application entry point
@@ -725,13 +725,15 @@ fastapi-user-management/
 │   └── logger_config.py        # Logging configuration
 ├── tests/                      # Test suite
 │   ├── __init__.py
+│   ├── README.md               # Test documentation
 │   ├── test_auth.py            # Password hashing tests (12 tests)
 │   ├── test_schemas.py         # Pydantic schema tests (20 tests)
 │   ├── test_models.py          # SQLAlchemy model tests (10 tests)
 │   ├── test_users.py           # User API integration tests (18 tests)
 │   ├── test_operations.py      # Calculator tests (37 tests)
 │   ├── test_main.py            # Calculator API tests (37 tests)
-│   └── test_logging.py         # Logging tests (26 tests)
+│   ├── test_logging.py         # Logging tests (26 tests)
+│   └── test_e2e.py             # End-to-end tests (Playwright)
 ├── docs/                       # Documentation
 │   ├── CI_CD_SETUP.md          # CI/CD setup guide
 │   ├── QUICK_REFERENCE.md      # Quick command reference
@@ -740,54 +742,23 @@ fastapi-user-management/
 ├── scripts/                    # Utility scripts
 │   ├── run_tests.sh            # Test runner script
 │   └── ci_check.sh             # CI validation script
-├── sql/                        # SQL scripts (legacy)
-│   ├── README.md
-│   ├── 01_create_tables.sql
-│   ├── 02_insert_records.sql
-│   ├── 03_query_data.sql
-│   ├── 04_update_record.sql
-│   ├── 05_delete_record.sql
-│   └── complete_setup.sql
+├── static/                     # Static files
+│   └── index.html              # Calculator web UI (legacy)
 ├── logs/                       # Log files directory
 │   ├── app.log                 # Application logs
 │   └── error.log               # Error logs
 ├── .github/
 │   └── workflows/
 │       └── ci.yml              # CI/CD pipeline configuration
-├── static/                     # Static files (legacy)
-│   └── index.html              # Calculator web UI
 ├── requirements.txt            # Production dependencies
 ├── requirements-test.txt       # Test dependencies
+├── pyproject.toml              # Pytest configuration
 ├── Dockerfile                  # Docker container configuration
 ├── docker-compose.yml          # Multi-container orchestration
-├── .env                        # Environment variables (gitignored)
-├── .env.example                # Environment template
+├── .env.example                # Environment variables template
 ├── .dockerignore               # Docker build exclusions
 ├── .gitignore                  # Git exclusions
-├── README.md                   # This file
-├── .github/
-│   └── workflows/
-│       └── ci.yml              # CI/CD pipeline configuration
-├── tests/
-│   ├── __init__.py
-│   ├── test_auth.py            # Password hashing tests (12 tests)
-│   ├── test_schemas.py         # Pydantic schema tests (20 tests)
-│   ├── test_models.py          # SQLAlchemy model tests (10 tests)
-│   ├── test_users.py           # User API integration tests (18 tests)
-│   ├── test_operations.py      # Calculator tests (37 tests)
-│   ├── test_main.py            # Calculator API tests (37 tests)
-│   └── test_logging.py         # Logging tests (26 tests)
-├── logs/                       # Log files directory
-│   ├── app.log                 # Application logs
-│   └── error.log               # Error logs
-└── sql/                        # SQL scripts (from original calculator)
-    ├── README.md
-    ├── 01_create_tables.sql
-    ├── 02_insert_records.sql
-    ├── 03_query_data.sql
-    ├── 04_update_record.sql
-    ├── 05_delete_record.sql
-    └── complete_setup.sql
+└── README.md                   # This file
 ```
 
 ## Environment Variables

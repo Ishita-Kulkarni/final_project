@@ -2,7 +2,7 @@
 Calculator operations module
 Contains all arithmetic calculation functions
 """
-from logger_config import get_logger
+from app.logger_config import get_logger
 
 # Initialize logger
 logger = get_logger(__name__)
