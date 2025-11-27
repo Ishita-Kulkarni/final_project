@@ -1,9 +1,9 @@
 """
 Pydantic schemas for request/response validation.
 """
-from pydantic import BaseModel, EmailStr, Field, ConfigDict
+from pydantic import BaseModel, EmailStr, Field, ConfigDict, field_validator, model_validator
 from datetime import datetime
-from typing import Optional
+from typing import Optional, Literal
 
 
 class UserBase(BaseModel):
@@ -107,6 +107,88 @@ class Message(BaseModel):
         json_schema_extra={
             "example": {
                 "message": "Operation completed successfully"
+            }
+        }
+    )
+
+
+# ============================================
+# Calculation Schemas
+# ============================================
+
+class CalculationBase(BaseModel):
+    """Base calculation schema with common attributes."""
+    a: float = Field(..., description="First operand")
+    b: float = Field(..., description="Second operand")
+    type: Literal["add", "subtract", "multiply", "divide"] = Field(
+        ..., 
+        description="Type of calculation operation"
+    )
+
+    @model_validator(mode='after')
+    def validate_division_by_zero(self):
+        """Prevent division by zero."""
+        if self.type == 'divide' and self.b == 0:
+            raise ValueError("Division by zero is not allowed")
+        return self
+
+
+class CalculationCreate(CalculationBase):
+    """Schema for creating a new calculation."""
+    
+    model_config = ConfigDict(
+        json_schema_extra={
+            "example": {
+                "a": 10.5,
+                "b": 5.2,
+                "type": "add"
+            }
+        }
+    )
+
+
+class CalculationResponse(CalculationBase):
+    """Schema for calculation response (includes computed result)."""
+    id: int
+    user_id: int
+    result: float
+    created_at: datetime
+
+    model_config = ConfigDict(
+        from_attributes=True,
+        json_schema_extra={
+            "example": {
+                "id": 1,
+                "user_id": 1,
+                "a": 10.5,
+                "b": 5.2,
+                "type": "add",
+                "result": 15.7,
+                "created_at": "2025-11-27T12:00:00"
+            }
+        }
+    )
+
+
+# Alias for CalculationRead (same as CalculationResponse)
+CalculationRead = CalculationResponse
+
+
+class CalculationUpdate(BaseModel):
+    """Schema for updating a calculation (optional fields)."""
+    a: Optional[float] = Field(None, description="First operand")
+    b: Optional[float] = Field(None, description="Second operand")
+    type: Optional[Literal["add", "subtract", "multiply", "divide"]] = Field(
+        None, 
+        description="Type of calculation operation"
+    )
+
+    model_config = ConfigDict(
+        json_schema_extra={
+            "example": {
+                "a": 20.0,
+                "b": 10.0,
+                "type": "multiply"
             }
         }
     )
