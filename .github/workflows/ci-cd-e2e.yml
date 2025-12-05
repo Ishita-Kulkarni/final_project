@@ -215,11 +215,11 @@ jobs:
         ACCESS_TOKEN_EXPIRE_MINUTES=30
         EOF
         
-        # Start services with docker-compose
-        docker-compose up -d postgres
+        # Start services with docker compose
+        docker compose up -d postgres
         
         # Wait for postgres to be ready
-        timeout 30 bash -c 'until docker-compose exec -T postgres pg_isready -U calculator_user; do sleep 1; done'
+        timeout 30 bash -c 'until docker compose exec -T postgres pg_isready -U calculator_user; do sleep 1; done'
         
         # Run the built image
         docker run -d --name test-app \
@@ -244,7 +244,7 @@ jobs:
         # Cleanup
         docker stop test-app
         docker rm test-app
-        docker-compose down
+        docker compose down
 
   # Job 4: Push to Docker Hub (only on main branch and if all tests pass)
   docker-push:
