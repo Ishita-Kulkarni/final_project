@@ -64,12 +64,19 @@ class TestUserRegistration:
         )
         assert response.status_code == 201
         data = response.json()
-        assert data["username"] == "testuser"
-        assert data["email"] == "test@example.com"
-        assert "password" not in data
-        assert "password_hash" not in data
-        assert "id" in data
-        assert "created_at" in data
+        # Check AuthResponse structure
+        assert "message" in data
+        assert "user" in data
+        assert "access_token" in data
+        assert "token_type" in data
+        # Check user details
+        user = data["user"]
+        assert user["username"] == "testuser"
+        assert user["email"] == "test@example.com"
+        assert "password" not in user
+        assert "password_hash" not in user
+        assert "id" in user
+        assert "created_at" in user
     
     def test_register_user_db_verification(self):
         """Test that registration actually stores data in database."""
@@ -83,7 +90,7 @@ class TestUserRegistration:
             }
         )
         assert response.status_code == 201
-        user_id = response.json()["id"]
+        user_id = response.json()["user"]["id"]
         
         # Verify data in database
         db = TestingSessionLocal()
@@ -226,7 +233,7 @@ class TestUserLogin:
                 "password": "securepass123"
             }
         )
-        user_id = reg_response.json()["id"]
+        user_id = reg_response.json()["user"]["id"]
         
         # Verify user exists in DB
         db = TestingSessionLocal()
@@ -351,7 +358,7 @@ class TestUserCRUD:
                 "password": "password123"
             }
         )
-        user_id = register_response.json()["id"]
+        user_id = register_response.json()["user"]["id"]
         
         # Get user by ID
         response = client.get(f"/users/{user_id}")
@@ -376,7 +383,7 @@ class TestUserCRUD:
                 "password": "password123"
             }
         )
-        user_id = register_response.json()["id"]
+        user_id = register_response.json()["user"]["id"]
         
         # Update user
         response = client.put(
@@ -410,7 +417,7 @@ class TestUserCRUD:
                 "password": "password123"
             }
         )
-        user2_id = register_response.json()["id"]
+        user2_id = register_response.json()["user"]["id"]
         
         # Try to update user2 with user1's username
         response = client.put(
@@ -430,7 +437,7 @@ class TestUserCRUD:
                 "password": "password123"
             }
         )
-        user_id = register_response.json()["id"]
+        user_id = register_response.json()["user"]["id"]
         
         # Delete user
         response = client.delete(f"/users/{user_id}")
