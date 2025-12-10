@@ -5,7 +5,7 @@ from pydantic import BaseModel
 from typing import Optional
 from contextlib import asynccontextmanager
 import time
-from app.operations import calculate, DivisionByZeroError, InvalidOperationError
+from app.operations import calculate, DivisionByZeroError, InvalidOperationError, NegativeRootError, InvalidExponentError
 from app.logger_config import setup_logging, get_logger
 from app.database import init_db
 from app.users import router as users_router
@@ -95,9 +95,9 @@ class CalculationResponse(BaseModel):
 
 @app.get("/")
 async def root():
-    """Serve the calculator web interface"""
-    logger.info("Root endpoint accessed - serving calculator interface")
-    return FileResponse("static/index.html")
+    """Serve the login page"""
+    logger.info("Root endpoint accessed - serving login page")
+    return FileResponse("static/login.html")
 
 @app.get("/api")
 async def api_info():
@@ -120,13 +120,17 @@ async def api_info():
 @app.post("/calculate", response_model=CalculationResponse)
 async def calculate_endpoint(request: CalculationRequest):
     """
-    Perform basic arithmetic calculations
+    Perform arithmetic calculations
     
     Operations supported:
     - add: Addition
     - subtract: Subtraction
     - multiply: Multiplication
     - divide: Division
+    - power: Exponentiation (num1 ** num2)
+    - modulus: Modulus (remainder)
+    - square_root: Square root of num1
+    - nth_root: Nth root (num1 ^ (1/num2))
     """
     logger.info(
         f"Calculate endpoint called with: num1={request.num1}, "
@@ -144,6 +148,12 @@ async def calculate_endpoint(request: CalculationRequest):
         )
     except DivisionByZeroError as e:
         logger.warning(f"Division by zero error: {str(e)}")
+        raise HTTPException(status_code=400, detail=str(e))
+    except NegativeRootError as e:
+        logger.warning(f"Negative root error: {str(e)}")
+        raise HTTPException(status_code=400, detail=str(e))
+    except InvalidExponentError as e:
+        logger.warning(f"Invalid exponent error: {str(e)}")
         raise HTTPException(status_code=400, detail=str(e))
     except InvalidOperationError as e:
         logger.warning(f"Invalid operation error: {str(e)}")

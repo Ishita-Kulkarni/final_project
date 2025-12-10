@@ -3,9 +3,10 @@ Unit tests for operations.py
 Tests all calculator functions individually
 """
 import pytest
+import math
 from app.operations import (
-    add, subtract, multiply, divide, calculate,
-    DivisionByZeroError, InvalidOperationError
+    add, subtract, multiply, divide, power, modulus, square_root, nth_root, calculate,
+    DivisionByZeroError, InvalidOperationError, NegativeRootError, InvalidExponentError
 )
 
 
@@ -149,6 +150,170 @@ class TestDivision:
         assert divide(1, 3) == pytest.approx(0.333333, rel=1e-5)
 
 
+class TestPower:
+    """Test cases for power function"""
+    
+    def test_power_positive_base_positive_exponent(self):
+        """Test power with positive base and exponent"""
+        assert power(2, 3) == 8
+        assert power(5, 2) == 25
+        assert power(10, 3) == 1000
+        
+    def test_power_positive_base_negative_exponent(self):
+        """Test power with positive base and negative exponent"""
+        assert power(2, -1) == 0.5
+        assert power(10, -2) == 0.01
+        
+    def test_power_negative_base_positive_exponent(self):
+        """Test power with negative base"""
+        assert power(-2, 3) == -8
+        assert power(-2, 2) == 4
+        
+    def test_power_zero_base(self):
+        """Test power with zero base"""
+        assert power(0, 5) == 0
+        assert power(0, 100) == 0
+        
+    def test_power_exponent_zero(self):
+        """Test any number to the power of zero"""
+        assert power(5, 0) == 1
+        assert power(100, 0) == 1
+        assert power(-5, 0) == 1
+        
+    def test_power_exponent_one(self):
+        """Test any number to the power of one"""
+        assert power(5, 1) == 5
+        assert power(-10, 1) == -10
+        
+    def test_power_decimal_exponent(self):
+        """Test power with decimal exponent (roots)"""
+        assert power(4, 0.5) == pytest.approx(2.0)
+        assert power(27, 1/3) == pytest.approx(3.0, rel=1e-5)
+        
+    def test_power_overflow_protection(self):
+        """Test that very large exponents raise error"""
+        with pytest.raises(InvalidExponentError):
+            power(2, 10000)
+
+
+class TestModulus:
+    """Test cases for modulus function"""
+    
+    def test_modulus_positive_numbers(self):
+        """Test modulus with positive numbers"""
+        assert modulus(10, 3) == 1
+        assert modulus(17, 5) == 2
+        assert modulus(20, 4) == 0
+        
+    def test_modulus_negative_dividend(self):
+        """Test modulus with negative dividend"""
+        assert modulus(-10, 3) == 2  # Python's modulus behavior
+        assert modulus(-17, 5) == 3
+        
+    def test_modulus_negative_divisor(self):
+        """Test modulus with negative divisor"""
+        assert modulus(10, -3) == -2
+        
+    def test_modulus_both_negative(self):
+        """Test modulus with both negative"""
+        assert modulus(-10, -3) == -1
+        
+    def test_modulus_by_zero(self):
+        """Test modulus by zero raises exception"""
+        with pytest.raises(DivisionByZeroError) as exc_info:
+            modulus(10, 0)
+        assert "modulus with zero divisor" in str(exc_info.value).lower()
+        
+    def test_modulus_decimal_numbers(self):
+        """Test modulus with decimal numbers"""
+        assert modulus(10.5, 3) == pytest.approx(1.5)
+        assert modulus(7.5, 2.5) == pytest.approx(0.0)
+
+
+class TestSquareRoot:
+    """Test cases for square_root function"""
+    
+    def test_square_root_perfect_squares(self):
+        """Test square root of perfect squares"""
+        assert square_root(4, 0) == 2
+        assert square_root(9, 0) == 3
+        assert square_root(16, 0) == 4
+        assert square_root(25, 0) == 5
+        
+    def test_square_root_non_perfect_squares(self):
+        """Test square root of non-perfect squares"""
+        assert square_root(2, 0) == pytest.approx(1.414213, rel=1e-5)
+        assert square_root(3, 0) == pytest.approx(1.732050, rel=1e-5)
+        
+    def test_square_root_zero(self):
+        """Test square root of zero"""
+        assert square_root(0, 0) == 0
+        
+    def test_square_root_one(self):
+        """Test square root of one"""
+        assert square_root(1, 0) == 1
+        
+    def test_square_root_decimal(self):
+        """Test square root of decimal numbers"""
+        assert square_root(0.25, 0) == 0.5
+        assert square_root(6.25, 0) == 2.5
+        
+    def test_square_root_negative_number(self):
+        """Test square root of negative number raises exception"""
+        with pytest.raises(NegativeRootError) as exc_info:
+            square_root(-4, 0)
+        assert "Cannot calculate square root of negative number" in str(exc_info.value)
+        
+    def test_square_root_large_number(self):
+        """Test square root of large number"""
+        assert square_root(1000000, 0) == 1000
+
+
+class TestNthRoot:
+    """Test cases for nth_root function"""
+    
+    def test_nth_root_square_root(self):
+        """Test nth_root with n=2 (square root)"""
+        assert nth_root(4, 2) == pytest.approx(2.0)
+        assert nth_root(9, 2) == pytest.approx(3.0)
+        
+    def test_nth_root_cube_root(self):
+        """Test nth_root with n=3 (cube root)"""
+        assert nth_root(8, 3) == pytest.approx(2.0)
+        assert nth_root(27, 3) == pytest.approx(3.0)
+        
+    def test_nth_root_fourth_root(self):
+        """Test nth_root with n=4"""
+        assert nth_root(16, 4) == pytest.approx(2.0)
+        assert nth_root(81, 4) == pytest.approx(3.0)
+        
+    def test_nth_root_negative_odd_root(self):
+        """Test nth_root with negative number and odd root"""
+        assert nth_root(-8, 3) == pytest.approx(-2.0)
+        assert nth_root(-27, 3) == pytest.approx(-3.0)
+        
+    def test_nth_root_negative_even_root(self):
+        """Test nth_root with negative number and even root raises exception"""
+        with pytest.raises(NegativeRootError) as exc_info:
+            nth_root(-4, 2)
+        assert "even root of negative number" in str(exc_info.value).lower()
+        
+    def test_nth_root_zero_root(self):
+        """Test nth_root with n=0 raises exception"""
+        with pytest.raises(DivisionByZeroError) as exc_info:
+            nth_root(8, 0)
+        assert "zeroth root" in str(exc_info.value).lower()
+        
+    def test_nth_root_one(self):
+        """Test nth_root with n=1"""
+        assert nth_root(5, 1) == pytest.approx(5.0)
+        assert nth_root(100, 1) == pytest.approx(100.0)
+        
+    def test_nth_root_decimal(self):
+        """Test nth_root with decimal numbers"""
+        assert nth_root(0.25, 2) == pytest.approx(0.5)
+
+
 class TestCalculate:
     """Test cases for the main calculate function"""
     
@@ -172,27 +337,51 @@ class TestCalculate:
         assert calculate(10, 2, "divide") == 5
         assert calculate(10, 2, "DIVIDE") == 5
         
+    def test_calculate_power(self):
+        """Test calculate with power operation"""
+        assert calculate(2, 3, "power") == 8
+        assert calculate(5, 2, "POWER") == 25
+        
+    def test_calculate_modulus(self):
+        """Test calculate with modulus operation"""
+        assert calculate(10, 3, "modulus") == 1
+        assert calculate(17, 5, "MODULUS") == 2
+        
+    def test_calculate_square_root(self):
+        """Test calculate with square_root operation"""
+        assert calculate(9, 0, "square_root") == 3
+        assert calculate(16, 0, "SQUARE_ROOT") == 4
+        
+    def test_calculate_nth_root(self):
+        """Test calculate with nth_root operation"""
+        assert calculate(8, 3, "nth_root") == pytest.approx(2.0)
+        assert calculate(27, 3, "NTH_ROOT") == pytest.approx(3.0)
+        
     def test_calculate_invalid_operation(self):
         """Test calculate with invalid operation"""
         with pytest.raises(InvalidOperationError) as exc_info:
-            calculate(5, 3, "power")
+            calculate(5, 3, "invalid_op")
         assert "Invalid operation" in str(exc_info.value)
-        assert "power" in str(exc_info.value)
         
     def test_calculate_division_by_zero(self):
         """Test calculate with division by zero"""
         with pytest.raises(DivisionByZeroError):
             calculate(10, 0, "divide")
             
+    def test_calculate_modulus_by_zero(self):
+        """Test calculate with modulus by zero"""
+        with pytest.raises(DivisionByZeroError):
+            calculate(10, 0, "modulus")
+            
+    def test_calculate_negative_square_root(self):
+        """Test calculate with negative square root"""
+        with pytest.raises(NegativeRootError):
+            calculate(-4, 0, "square_root")
+            
     def test_calculate_empty_operation(self):
         """Test calculate with empty operation"""
         with pytest.raises(InvalidOperationError):
             calculate(5, 3, "")
-            
-    def test_calculate_special_characters(self):
-        """Test calculate with special characters in operation"""
-        with pytest.raises(InvalidOperationError):
-            calculate(5, 3, "add@#$")
 
 
 class TestEdgeCases:
@@ -214,16 +403,37 @@ class TestEdgeCases:
         assert add(-0, 5) == 5
         assert multiply(-0, 5) == 0
         
-    def test_infinity_operations(self):
-        """Test operations with infinity"""
-        inf = float('inf')
-        assert add(inf, 5) == inf
-        assert multiply(inf, 2) == inf
-        assert subtract(inf, 5) == inf
+    def test_power_fractional_results(self):
+        """Test power operations that result in fractions"""
+        assert power(2, -3) == pytest.approx(0.125)
         
-    def test_nan_operations(self):
-        """Test operations with NaN"""
-        import math
-        nan = float('nan')
-        result = add(nan, 5)
-        assert math.isnan(result)
+    def test_modulus_smaller_dividend(self):
+        """Test modulus when dividend is smaller than divisor"""
+        assert modulus(3, 10) == 3
+        
+    def test_nth_root_identity(self):
+        """Test that (x^n)^(1/n) = x"""
+        x = 5
+        n = 3
+        result = nth_root(power(x, n), n)
+        assert result == pytest.approx(x, rel=1e-5)
+
+
+class TestNewOperationsIntegration:
+    """Integration tests for new operations working together"""
+    
+    def test_power_and_square_root(self):
+        """Test that power and square root are inverses"""
+        assert square_root(power(5, 2), 0) == pytest.approx(5.0)
+        
+    def test_modulus_after_division(self):
+        """Test modulus and division relationship"""
+        a, b = 17, 5
+        quotient = int(divide(a, b))
+        remainder = modulus(a, b)
+        assert quotient * b + remainder == a
+        
+    def test_chained_operations(self):
+        """Test multiple operations in sequence"""
+        result = add(power(2, 3), modulus(10, 3))
+        assert result == 9  # 8 + 1

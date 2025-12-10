@@ -200,7 +200,7 @@ class TestCalculateEndpointErrors:
     
     def test_invalid_operation(self):
         """Test invalid operation returns error"""
-        payload = {"num1": 10, "num2": 5, "operation": "power"}
+        payload = {"num1": 10, "num2": 5, "operation": "invalidop123"}
         response = client.post("/calculate", json=payload)
         assert response.status_code == 400
         assert "Invalid operation" in response.json()["detail"]
@@ -306,3 +306,219 @@ class TestNonExistentEndpoints:
         """Test using wrong HTTP method"""
         response = client.get("/calculate")
         assert response.status_code == 405  # Method not allowed
+
+
+class TestCalculateEndpointPower:
+    """Test cases for power operations"""
+    
+    def test_power_positive_base_positive_exponent(self):
+        """Test power with positive base and exponent"""
+        payload = {"num1": 2, "num2": 3, "operation": "power"}
+        response = client.post("/calculate", json=payload)
+        assert response.status_code == 200
+        assert response.json()["result"] == 8.0
+        
+    def test_power_square(self):
+        """Test squaring a number"""
+        payload = {"num1": 5, "num2": 2, "operation": "power"}
+        response = client.post("/calculate", json=payload)
+        assert response.status_code == 200
+        assert response.json()["result"] == 25.0
+        
+    def test_power_cube(self):
+        """Test cubing a number"""
+        payload = {"num1": 3, "num2": 3, "operation": "power"}
+        response = client.post("/calculate", json=payload)
+        assert response.status_code == 200
+        assert response.json()["result"] == 27.0
+        
+    def test_power_negative_exponent(self):
+        """Test power with negative exponent"""
+        payload = {"num1": 2, "num2": -1, "operation": "power"}
+        response = client.post("/calculate", json=payload)
+        assert response.status_code == 200
+        assert response.json()["result"] == 0.5
+        
+    def test_power_zero_exponent(self):
+        """Test any number to the power of zero"""
+        payload = {"num1": 5, "num2": 0, "operation": "power"}
+        response = client.post("/calculate", json=payload)
+        assert response.status_code == 200
+        assert response.json()["result"] == 1.0
+        
+    def test_power_case_insensitive(self):
+        """Test power operation is case insensitive"""
+        payload = {"num1": 2, "num2": 3, "operation": "POWER"}
+        response = client.post("/calculate", json=payload)
+        assert response.status_code == 200
+        assert response.json()["result"] == 8.0
+
+
+class TestCalculateEndpointModulus:
+    """Test cases for modulus operations"""
+    
+    def test_modulus_positive_numbers(self):
+        """Test modulus with positive numbers"""
+        payload = {"num1": 10, "num2": 3, "operation": "modulus"}
+        response = client.post("/calculate", json=payload)
+        assert response.status_code == 200
+        assert response.json()["result"] == 1.0
+        
+    def test_modulus_exact_division(self):
+        """Test modulus when dividend is evenly divisible"""
+        payload = {"num1": 20, "num2": 4, "operation": "modulus"}
+        response = client.post("/calculate", json=payload)
+        assert response.status_code == 200
+        assert response.json()["result"] == 0.0
+        
+    def test_modulus_by_zero(self):
+        """Test modulus by zero returns error"""
+        payload = {"num1": 10, "num2": 0, "operation": "modulus"}
+        response = client.post("/calculate", json=payload)
+        assert response.status_code == 400
+        assert "modulus" in response.json()["detail"].lower()
+        
+    def test_modulus_decimal_numbers(self):
+        """Test modulus with decimal numbers"""
+        payload = {"num1": 10.5, "num2": 3, "operation": "modulus"}
+        response = client.post("/calculate", json=payload)
+        assert response.status_code == 200
+        result = response.json()["result"]
+        assert abs(result - 1.5) < 0.0001
+        
+    def test_modulus_case_insensitive(self):
+        """Test modulus operation is case insensitive"""
+        payload = {"num1": 17, "num2": 5, "operation": "MODULUS"}
+        response = client.post("/calculate", json=payload)
+        assert response.status_code == 200
+        assert response.json()["result"] == 2.0
+
+
+class TestCalculateEndpointSquareRoot:
+    """Test cases for square root operations"""
+    
+    def test_square_root_perfect_square(self):
+        """Test square root of perfect square"""
+        payload = {"num1": 16, "num2": 0, "operation": "square_root"}
+        response = client.post("/calculate", json=payload)
+        assert response.status_code == 200
+        assert response.json()["result"] == 4.0
+        
+    def test_square_root_non_perfect_square(self):
+        """Test square root of non-perfect square"""
+        payload = {"num1": 2, "num2": 0, "operation": "square_root"}
+        response = client.post("/calculate", json=payload)
+        assert response.status_code == 200
+        result = response.json()["result"]
+        assert abs(result - 1.414213) < 0.0001
+        
+    def test_square_root_zero(self):
+        """Test square root of zero"""
+        payload = {"num1": 0, "num2": 0, "operation": "square_root"}
+        response = client.post("/calculate", json=payload)
+        assert response.status_code == 200
+        assert response.json()["result"] == 0.0
+        
+    def test_square_root_one(self):
+        """Test square root of one"""
+        payload = {"num1": 1, "num2": 0, "operation": "square_root"}
+        response = client.post("/calculate", json=payload)
+        assert response.status_code == 200
+        assert response.json()["result"] == 1.0
+        
+    def test_square_root_negative_number(self):
+        """Test square root of negative number returns error"""
+        payload = {"num1": -4, "num2": 0, "operation": "square_root"}
+        response = client.post("/calculate", json=payload)
+        assert response.status_code == 400
+        assert "negative" in response.json()["detail"].lower()
+        
+    def test_square_root_decimal(self):
+        """Test square root of decimal number"""
+        payload = {"num1": 6.25, "num2": 0, "operation": "square_root"}
+        response = client.post("/calculate", json=payload)
+        assert response.status_code == 200
+        assert response.json()["result"] == 2.5
+        
+    def test_square_root_case_insensitive(self):
+        """Test square_root operation is case insensitive"""
+        payload = {"num1": 9, "num2": 0, "operation": "SQUARE_ROOT"}
+        response = client.post("/calculate", json=payload)
+        assert response.status_code == 200
+        assert response.json()["result"] == 3.0
+
+
+class TestCalculateEndpointNthRoot:
+    """Test cases for nth root operations"""
+    
+    def test_nth_root_square_root(self):
+        """Test nth root with n=2 (square root)"""
+        payload = {"num1": 9, "num2": 2, "operation": "nth_root"}
+        response = client.post("/calculate", json=payload)
+        assert response.status_code == 200
+        result = response.json()["result"]
+        assert abs(result - 3.0) < 0.0001
+        
+    def test_nth_root_cube_root(self):
+        """Test nth root with n=3 (cube root)"""
+        payload = {"num1": 27, "num2": 3, "operation": "nth_root"}
+        response = client.post("/calculate", json=payload)
+        assert response.status_code == 200
+        result = response.json()["result"]
+        assert abs(result - 3.0) < 0.0001
+        
+    def test_nth_root_fourth_root(self):
+        """Test nth root with n=4"""
+        payload = {"num1": 16, "num2": 4, "operation": "nth_root"}
+        response = client.post("/calculate", json=payload)
+        assert response.status_code == 200
+        result = response.json()["result"]
+        assert abs(result - 2.0) < 0.0001
+        
+    def test_nth_root_negative_odd_root(self):
+        """Test nth root with negative number and odd root"""
+        payload = {"num1": -8, "num2": 3, "operation": "nth_root"}
+        response = client.post("/calculate", json=payload)
+        assert response.status_code == 200
+        result = response.json()["result"]
+        assert abs(result - (-2.0)) < 0.0001
+        
+    def test_nth_root_negative_even_root(self):
+        """Test nth root with negative number and even root returns error"""
+        payload = {"num1": -4, "num2": 2, "operation": "nth_root"}
+        response = client.post("/calculate", json=payload)
+        assert response.status_code == 400
+        assert "even root" in response.json()["detail"].lower()
+        
+    def test_nth_root_zero_root(self):
+        """Test nth root with n=0 returns error"""
+        payload = {"num1": 8, "num2": 0, "operation": "nth_root"}
+        response = client.post("/calculate", json=payload)
+        assert response.status_code == 400
+        assert "zeroth root" in response.json()["detail"].lower()
+        
+    def test_nth_root_case_insensitive(self):
+        """Test nth_root operation is case insensitive"""
+        payload = {"num1": 8, "num2": 3, "operation": "NTH_ROOT"}
+        response = client.post("/calculate", json=payload)
+        assert response.status_code == 200
+        result = response.json()["result"]
+        assert abs(result - 2.0) < 0.0001
+
+
+class TestNewOperationsInvalidInputs:
+    """Test invalid operation errors for new operations"""
+    
+    def test_invalid_operation_name(self):
+        """Test completely invalid operation name"""
+        payload = {"num1": 10, "num2": 5, "operation": "invalid_op"}
+        response = client.post("/calculate", json=payload)
+        assert response.status_code == 400
+        assert "Invalid operation" in response.json()["detail"]
+        
+    def test_power_overflow(self):
+        """Test power operation with very large exponent"""
+        payload = {"num1": 2, "num2": 10000, "operation": "power"}
+        response = client.post("/calculate", json=payload)
+        assert response.status_code == 400
+        assert "overflow" in response.json()["detail"].lower() or "too large" in response.json()["detail"].lower()

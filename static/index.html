@@ -26,7 +26,7 @@
             border-radius: 20px;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
             padding: 40px;
-            max-width: 500px;
+            max-width: 600px;
             width: 100%;
         }
 
@@ -87,7 +87,7 @@
             border: 2px solid #e0e0e0;
             border-radius: 8px;
             background: white;
-            font-size: 1.1em;
+            font-size: 1em;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s;
@@ -203,12 +203,26 @@
         .loading.show {
             display: block;
         }
+
+        .num2-label {
+            transition: opacity 0.3s;
+        }
+
+        .num2-label.hidden-label {
+            opacity: 0.5;
+        }
+
+        .helper-text {
+            font-size: 0.8em;
+            color: #999;
+            margin-top: 4px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>🧮 FastAPI Calculator</h1>
-        <p class="subtitle">Perform basic arithmetic operations</p>
+        <p class="subtitle">Perform arithmetic operations including advanced functions</p>
 
         <div class="calculator">
             <div class="input-group">
@@ -219,16 +233,21 @@
             <div class="input-group">
                 <label>Operation</label>
                 <div class="operation-buttons">
-                    <button class="operation-btn active" data-op="add">➕ Add</button>
-                    <button class="operation-btn" data-op="subtract">➖ Subtract</button>
-                    <button class="operation-btn" data-op="multiply">✖️ Multiply</button>
-                    <button class="operation-btn" data-op="divide">➗ Divide</button>
+                    <button class="operation-btn active" data-op="add" title="Addition">➕ Add</button>
+                    <button class="operation-btn" data-op="subtract" title="Subtraction">➖ Subtract</button>
+                    <button class="operation-btn" data-op="multiply" title="Multiplication">✖️ Multiply</button>
+                    <button class="operation-btn" data-op="divide" title="Division">➗ Divide</button>
+                    <button class="operation-btn" data-op="power" title="Exponentiation (a^b)">�� Power</button>
+                    <button class="operation-btn" data-op="modulus" title="Modulus (remainder)">📐 Modulus</button>
+                    <button class="operation-btn" data-op="square_root" title="Square root of first number">√ Square Root</button>
+                    <button class="operation-btn" data-op="nth_root" title="Nth root (a^(1/b))">ⁿ√ Nth Root</button>
                 </div>
             </div>
 
-            <div class="input-group">
-                <label for="num2">Second Number</label>
+            <div class="input-group" id="num2-group">
+                <label for="num2" id="num2-label">Second Number</label>
                 <input type="number" id="num2" placeholder="Enter second number" step="any" value="">
+                <div class="helper-text" id="helper-text"></div>
             </div>
 
             <button class="calculate-btn" onclick="calculate()">Calculate</button>
@@ -251,12 +270,42 @@
     <script>
         let selectedOperation = 'add';
 
+        // Update helper text based on operation
+        function updateHelperText(operation) {
+            const helperText = document.getElementById('helper-text');
+            const num2Label = document.getElementById('num2-label');
+            const num2Input = document.getElementById('num2');
+            
+            const helpers = {
+                'add': 'Enter the number to add',
+                'subtract': 'Enter the number to subtract',
+                'multiply': 'Enter the number to multiply by',
+                'divide': 'Enter the divisor (cannot be zero)',
+                'power': 'Enter the exponent (e.g., 2 for square, 3 for cube)',
+                'modulus': 'Enter the divisor (cannot be zero)',
+                'square_root': 'Second number not needed for square root',
+                'nth_root': 'Enter the root degree (e.g., 2 for square root, 3 for cube root)'
+            };
+            
+            helperText.textContent = helpers[operation] || '';
+            
+            if (operation === 'square_root') {
+                num2Label.classList.add('hidden-label');
+                num2Input.disabled = true;
+                num2Input.value = '';
+            } else {
+                num2Label.classList.remove('hidden-label');
+                num2Input.disabled = false;
+            }
+        }
+
         // Handle operation button clicks
         document.querySelectorAll('.operation-btn').forEach(btn => {
             btn.addEventListener('click', function() {
                 document.querySelectorAll('.operation-btn').forEach(b => b.classList.remove('active'));
                 this.classList.add('active');
                 selectedOperation = this.dataset.op;
+                updateHelperText(selectedOperation);
             });
         });
 
@@ -278,8 +327,14 @@
             const loading = document.getElementById('loading');
 
             // Validation
-            if (isNaN(num1) || isNaN(num2)) {
-                showError('Please enter valid numbers');
+            if (isNaN(num1)) {
+                showError('Please enter a valid first number');
+                return;
+            }
+
+            // For square_root, num2 is optional
+            if (selectedOperation !== 'square_root' && isNaN(num2)) {
+                showError('Please enter a valid second number');
                 return;
             }
 
@@ -295,7 +350,7 @@
                     },
                     body: JSON.stringify({
                         num1: num1,
-                        num2: num2,
+                        num2: selectedOperation === 'square_root' ? 0 : num2,
                         operation: selectedOperation
                     })
                 });
@@ -309,16 +364,29 @@
                     // Show success result
                     result.classList.remove('error');
                     result.classList.add('show');
-                    resultValue.textContent = data.result;
+                    resultValue.textContent = formatResult(data.result);
                     
                     const opSymbols = {
                         'add': '+',
                         'subtract': '-',
                         'multiply': '×',
-                        'divide': '÷'
+                        'divide': '÷',
+                        'power': '^',
+                        'modulus': '%',
+                        'square_root': '√',
+                        'nth_root': 'ⁿ√'
                     };
                     
-                    resultDetails.textContent = `${data.num1} ${opSymbols[data.operation]} ${data.num2} = ${data.result}`;
+                    let detailText;
+                    if (selectedOperation === 'square_root') {
+                        detailText = `√${data.num1} = ${formatResult(data.result)}`;
+                    } else if (selectedOperation === 'nth_root') {
+                        detailText = `${data.num2}√${data.num1} = ${formatResult(data.result)}`;
+                    } else {
+                        detailText = `${data.num1} ${opSymbols[data.operation]} ${data.num2} = ${formatResult(data.result)}`;
+                    }
+                    
+                    resultDetails.textContent = detailText;
                 } else {
                     // Show error
                     showError(data.detail || 'Calculation failed');
@@ -327,6 +395,13 @@
                 loading.classList.remove('show');
                 showError('Connection error. Please make sure the server is running.');
             }
+        }
+
+        function formatResult(value) {
+            // Format to a reasonable number of decimal places
+            if (Math.abs(value) < 1e-10) return '0';
+            if (Math.abs(value) > 1e10) return value.toExponential(4);
+            return parseFloat(value.toFixed(10)).toString();
         }
 
         function showError(message) {
@@ -342,6 +417,7 @@
         // Set focus on first input when page loads
         window.onload = function() {
             document.getElementById('num1').focus();
+            updateHelperText('add');
         };
     </script>
 </body>

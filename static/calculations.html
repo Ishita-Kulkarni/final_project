@@ -494,6 +494,10 @@
                         <option value="subtract">Subtraction (-)</option>
                         <option value="multiply">Multiplication (×)</option>
                         <option value="divide">Division (÷)</option>
+                        <option value="power">Power (^)</option>
+                        <option value="modulus">Modulus (%)</option>
+                        <option value="square_root">Square Root (√)</option>
+                        <option value="nth_root">Nth Root (ⁿ√)</option>
                     </select>
                     <div class="error-message" id="operationError"></div>
                 </div>
@@ -660,14 +664,30 @@
                 'add': '+',
                 'subtract': '-',
                 'multiply': '×',
-                'divide': '÷'
+                'divide': '÷',
+                'power': '^',
+                'modulus': '%',
+                'square_root': '√',
+                'nth_root': 'ⁿ√'
+            };
+
+            const formatExpression = (calc) => {
+                const symbol = operationSymbols[calc.type];
+                
+                if (calc.type === 'square_root') {
+                    return `${symbol}${calc.a}`;
+                } else if (calc.type === 'nth_root') {
+                    return `${calc.b}${symbol}${calc.a}`;
+                } else {
+                    return `${calc.a} <span class="operation-symbol">${symbol}</span> ${calc.b}`;
+                }
             };
 
             container.innerHTML = calculations.map(calc => `
                 <div class="calculation-card">
                     <div class="calculation-info">
                         <div class="calculation-expression">
-                            ${calc.a} <span class="operation-symbol">${operationSymbols[calc.type]}</span> ${calc.b}
+                            ${formatExpression(calc)}
                         </div>
                         <div class="calculation-result">= ${calc.result}</div>
                         <div class="calculation-meta">
@@ -692,7 +712,23 @@
                 'add': 'Addition (+)',
                 'subtract': 'Subtraction (-)',
                 'multiply': 'Multiplication (×)',
-                'divide': 'Division (÷)'
+                'divide': 'Division (÷)',
+                'power': 'Power (^)',
+                'modulus': 'Modulus (%)',
+                'square_root': 'Square Root (√)',
+                'nth_root': 'Nth Root (ⁿ√)'
+            };
+
+            const formatDetailExpression = (calc) => {
+                const symbol = operationSymbols[calc.type].split(' ')[1];
+                
+                if (calc.type === 'square_root') {
+                    return `${symbol}${calc.a}`;
+                } else if (calc.type === 'nth_root') {
+                    return `${calc.b}${symbol}${calc.a}`;
+                } else {
+                    return `${calc.a} ${symbol} ${calc.b}`;
+                }
             };
 
             document.getElementById('calculationDetails').innerHTML = `
@@ -700,7 +736,7 @@
                     <div style="margin-bottom: 20px; padding: 20px; background: #f8f9fa; border-radius: 10px;">
                         <h3 style="color: #667eea; margin-bottom: 15px;">Calculation Expression</h3>
                         <div style="font-size: 2em; text-align: center; margin: 20px 0;">
-                            ${calc.a} ${operationSymbols[calc.type].split(' ')[1]} ${calc.b} = <strong style="color: #667eea;">${calc.result}</strong>
+                            ${formatDetailExpression(calc)} = <strong style="color: #667eea;">${calc.result}</strong>
                         </div>
                     </div>
                     

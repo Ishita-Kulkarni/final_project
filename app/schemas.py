@@ -146,16 +146,29 @@ class CalculationBase(BaseModel):
     """Base calculation schema with common attributes."""
     a: float = Field(..., description="First operand")
     b: float = Field(..., description="Second operand")
-    type: Literal["add", "subtract", "multiply", "divide"] = Field(
+    type: Literal["add", "subtract", "multiply", "divide", "power", "modulus", "square_root", "nth_root"] = Field(
         ..., 
         description="Type of calculation operation"
     )
 
     @model_validator(mode='after')
-    def validate_division_by_zero(self):
-        """Prevent division by zero."""
-        if self.type == 'divide' and self.b == 0:
-            raise ValueError("Division by zero is not allowed")
+    def validate_operations(self):
+        """Validate operation-specific constraints."""
+        # Division and modulus by zero
+        if self.type in ['divide', 'modulus'] and self.b == 0:
+            raise ValueError(f"{self.type.capitalize()} by zero is not allowed")
+        
+        # Square root of negative number
+        if self.type == 'square_root' and self.a < 0:
+            raise ValueError("Cannot calculate square root of negative number")
+        
+        # Nth root validations
+        if self.type == 'nth_root':
+            if self.b == 0:
+                raise ValueError("Cannot calculate zeroth root")
+            if self.a < 0 and self.b % 2 == 0:
+                raise ValueError("Cannot calculate even root of negative number")
+        
         return self
 
 
@@ -204,7 +217,7 @@ class CalculationUpdate(BaseModel):
     """Schema for updating a calculation (optional fields)."""
     a: Optional[float] = Field(None, description="First operand")
     b: Optional[float] = Field(None, description="Second operand")
-    type: Optional[Literal["add", "subtract", "multiply", "divide"]] = Field(
+    type: Optional[Literal["add", "subtract", "multiply", "divide", "power", "modulus", "square_root", "nth_root"]] = Field(
         None, 
         description="Type of calculation operation"
     )
