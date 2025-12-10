@@ -13,16 +13,27 @@ load_dotenv()
 # Database URL from environment variable or default
 DATABASE_URL = os.getenv(
     "DATABASE_URL",
-    "postgresql://calculator_user:calculator_pass@localhost:5432/calculator_db"
+    "sqlite:///./calculator.db"  # Default to SQLite for easy local development
 )
 
+# Determine if using SQLite
+is_sqlite = DATABASE_URL.startswith("sqlite")
+
 # Create SQLAlchemy engine
-engine = create_engine(
-    DATABASE_URL,
-    pool_pre_ping=True,  # Verify connections before using them
-    pool_size=10,  # Maximum number of connections to keep in the pool
-    max_overflow=20  # Maximum number of connections that can be created beyond pool_size
-)
+if is_sqlite:
+    # SQLite-specific configuration
+    engine = create_engine(
+        DATABASE_URL,
+        connect_args={"check_same_thread": False}  # Required for SQLite
+    )
+else:
+    # PostgreSQL or other database configuration
+    engine = create_engine(
+        DATABASE_URL,
+        pool_pre_ping=True,  # Verify connections before using them
+        pool_size=10,  # Maximum number of connections to keep in the pool
+        max_overflow=20  # Maximum number of connections that can be created beyond pool_size
+    )
 
 # Create SessionLocal class for database sessions
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)

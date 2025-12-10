@@ -286,7 +286,8 @@
         </form>
 
         <div class="links">
-            Already have an account? <a href="login.html">Login here</a>
+            Already have an account? <a href="login.html">Login here</a><br>
+            <a href="/" style="margin-top: 10px; display: inline-block;">🧮 Back to Calculator</a>
         </div>
     </div>
 
@@ -514,9 +515,9 @@
                     console.log('JWT Token stored:', data.access_token);
                     console.log('User info:', data.user);
 
-                    // Redirect to dashboard/home page after 1.5 seconds
+                    // Redirect to calculations page after 1.5 seconds
                     setTimeout(() => {
-                        window.location.href = '/';  // Change to your dashboard page
+                        window.location.href = '/static/calculations.html';
                     }, 1500);
                 } else {
                     // Registration failed
@@ -544,9 +545,9 @@
 
         // Check if user is already logged in
         if (localStorage.getItem('access_token')) {
-            showAlert('You are already logged in!', 'info');
+            showAlert('You are already logged in! Redirecting to calculations...', 'info');
             setTimeout(() => {
-                window.location.href = '/';
+                window.location.href = '/static/calculations.html';
             }, 1500);
         }
     </script>

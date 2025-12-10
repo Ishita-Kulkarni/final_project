@@ -275,7 +275,8 @@
         </form>
 
         <div class="links">
-            Don't have an account? <a href="register.html">Register here</a>
+            Don't have an account? <a href="register.html">Register here</a><br>
+            <a href="/" style="margin-top: 10px; display: inline-block;">🧮 Back to Calculator</a>
         </div>
     </div>
 
@@ -413,9 +414,9 @@
                     console.log('User info:', data.user);
                     console.log('Storage type:', rememberMeCheckbox.checked ? 'localStorage' : 'sessionStorage');
 
-                    // Redirect to dashboard/home page after 1 second
+                    // Redirect to calculations page after 1 second
                     setTimeout(() => {
-                        window.location.href = '/';  // Change to your dashboard page
+                        window.location.href = '/static/calculations.html';
                     }, 1000);
                 } else {
                     // Login failed
@@ -451,9 +452,9 @@
             const sessionToken = sessionStorage.getItem('access_token');
             
             if (localToken || sessionToken) {
-                showAlert('You are already logged in!', 'info');
+                showAlert('You are already logged in! Redirecting to calculations...', 'info');
                 setTimeout(() => {
-                    window.location.href = '/';
+                    window.location.href = '/static/calculations.html';
                 }, 1500);
             }
         }
