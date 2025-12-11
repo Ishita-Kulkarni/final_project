@@ -223,7 +223,7 @@ jobs:
         
         # Run the built image
         docker run -d --name test-app \
-          --network assignment14_calculator_network \
+          --network final_project_calculator_network \
           -e DATABASE_URL=postgresql://calculator_user:calculator_pass@postgres:5432/calculator_db \
           -e SECRET_KEY=test-secret-key \
           -e ALGORITHM=HS256 \
