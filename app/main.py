@@ -99,6 +99,12 @@ async def root():
     logger.info("Root endpoint accessed - serving login page")
     return FileResponse("static/login.html")
 
+@app.get("/calculator")
+async def calculator():
+    """Serve the calculator page"""
+    logger.info("Calculator endpoint accessed - serving calculator page")
+    return FileResponse("static/index.html")
+
 @app.get("/api")
 async def api_info():
     """API information endpoint"""

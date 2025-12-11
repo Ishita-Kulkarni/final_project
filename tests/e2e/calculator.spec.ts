@@ -37,7 +37,7 @@ async function isError(page: Page): Promise<boolean> {
 
 test.describe('Calculator UI - Basic Operations', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/');
+    await page.goto('/calculator');
   });
 
   test('should load calculator page successfully', async ({ page }) => {
@@ -59,7 +59,7 @@ test.describe('Calculator UI - Basic Operations', () => {
 
 test.describe('Calculator UI - Power Operation', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/');
+    await page.goto('/calculator');
   });
 
   test('should calculate 2^3 = 8', async ({ page }) => {
@@ -95,7 +95,7 @@ test.describe('Calculator UI - Power Operation', () => {
 
 test.describe('Calculator UI - Modulus Operation', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/');
+    await page.goto('/calculator');
   });
 
   test('should calculate 10 % 3 = 1', async ({ page }) => {
@@ -134,7 +134,7 @@ test.describe('Calculator UI - Modulus Operation', () => {
 
 test.describe('Calculator UI - Square Root Operation', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/');
+    await page.goto('/calculator');
   });
 
   test('should calculate √16 = 4', async ({ page }) => {
@@ -186,7 +186,7 @@ test.describe('Calculator UI - Square Root Operation', () => {
 
 test.describe('Calculator UI - Nth Root Operation', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/');
+    await page.goto('/calculator');
   });
 
   test('should calculate 2√9 = 3 (square root)', async ({ page }) => {
@@ -244,7 +244,7 @@ test.describe('Calculator UI - Nth Root Operation', () => {
 
 test.describe('Calculator UI - Operation Switching', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/');
+    await page.goto('/calculator');
   });
 
   test('should switch between operations correctly', async ({ page }) => {
@@ -283,7 +283,7 @@ test.describe('Calculator UI - Operation Switching', () => {
 
 test.describe('Calculator UI - Decimal Numbers', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/');
+    await page.goto('/calculator');
   });
 
   test('should handle decimal numbers in power operation', async ({ page }) => {
@@ -309,7 +309,7 @@ test.describe('Calculator UI - Decimal Numbers', () => {
 
 test.describe('Calculator UI - Input Validation', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/');
+    await page.goto('/calculator');
   });
 
   test('should show error when num1 is empty', async ({ page }) => {
@@ -343,7 +343,7 @@ test.describe('Calculator UI - Input Validation', () => {
 
 test.describe('Calculator UI - Result Display', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/');
+    await page.goto('/calculator');
   });
 
   test('should display result with proper formatting', async ({ page }) => {
