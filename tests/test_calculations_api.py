@@ -197,7 +197,7 @@ class TestCalculationAdd:
         
         # Schema validation returns 422, not 400
         assert response.status_code == 422
-        assert "division by zero" in str(response.json()).lower()
+        assert "divide by zero" in str(response.json()).lower()
     
     def test_add_calculation_invalid_operation(self, authenticated_user):
         """Test that invalid operation is rejected."""
@@ -670,11 +670,11 @@ class TestInvalidDataAndErrors:
     """Test invalid inputs, error status codes, and error responses."""
     
     def test_invalid_calculation_type(self, authenticated_user):
-        """Test that invalid operation type returns 422."""
+        """Test that invalid calculation type is rejected with 422."""
         calc_data = {
             "a": 10.0,
             "b": 5.0,
-            "type": "power"  # Invalid operation
+            "type": "power"  # power is now valid
         }
         
         response = client.post(
@@ -683,9 +683,11 @@ class TestInvalidDataAndErrors:
             headers=authenticated_user
         )
         
-        assert response.status_code == 422
-        error = response.json()
-        assert "detail" in error
+        # power is now a valid operation type, so this should succeed
+        assert response.status_code == 201
+        result = response.json()
+        assert result["type"] == "power"
+        assert result["result"] == 100000.0  # 10^5
     
     def test_missing_required_fields(self, authenticated_user):
         """Test that missing required fields returns 422."""

@@ -186,7 +186,7 @@ class TestCalculationSchemas:
             "b": 0.0,
             "type": "divide"
         }
-        with pytest.raises(ValueError, match="Division by zero"):
+        with pytest.raises(ValueError, match="Divide by zero is not allowed"):
             CalculationCreate(**data)
     
     def test_calculation_create_all_operation_types(self):

@@ -14,11 +14,11 @@ class TestRootEndpoint:
     """Test cases for the root endpoint"""
     
     def test_root_endpoint_success(self):
-        """Test root endpoint returns HTML calculator interface"""
+        """Test root endpoint returns HTML login page"""
         response = client.get("/")
         assert response.status_code == 200
         assert "text/html" in response.headers["content-type"]
-        assert b"FastAPI Calculator" in response.content
+        assert b"Login" in response.content or b"Welcome Back" in response.content
         
     def test_root_endpoint_structure(self):
         """Test API info endpoint response structure"""

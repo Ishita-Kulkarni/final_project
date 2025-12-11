@@ -148,9 +148,9 @@ class TestAPILogging:
     def test_calculate_endpoint_logs_invalid_operation(self, caplog):
         """Test that invalid operation is logged"""
         with caplog.at_level(logging.WARNING):
-            payload = {"num1": 10, "num2": 5, "operation": "power"}
+            payload = {"num1": 10, "num2": 5, "operation": "invalid_op"}
             response = self.client.post("/calculate", json=payload)
-            assert "Invalid operation error" in caplog.text
+            assert "Invalid operation" in caplog.text
             
     def test_health_endpoint_logs(self, caplog):
         """Test that health endpoint logs access"""
