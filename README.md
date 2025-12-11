@@ -1,59 +1,97 @@
-# FastAPI Calculator with JWT Authentication & Full BREAD Operations
+# FastAPI Advanced Calculator with JWT Authentication & 8 Operations
 
-[![CI/CD](https://github.com/Ishita-Kulkarni/assignment14/workflows/CI/CD%20with%20E2E%20Tests%20and%20Docker%20Hub%20Deployment/badge.svg)](https://github.com/Ishita-Kulkarni/assignment14/actions)
+[![CI/CD](https://github.com/Ishita-Kulkarni/final_project/workflows/CI/CD%20with%20E2E%20Tests%20and%20Docker%20Hub%20Deployment/badge.svg)](https://github.com/Ishita-Kulkarni/final_project/actions)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
-[![FastAPI](https://img.shields.io/badge/FastAPI-0.104.1-green.svg)](https://fastapi.tiangolo.com/)
-[![Tests](https://img.shields.io/badge/tests-72%20passing-brightgreen.svg)](https://github.com/Ishita-Kulkarni/assignment14)
+[![FastAPI](https://img.shields.io/badge/FastAPI-2.0.0-green.svg)](https://fastapi.tiangolo.com/)
+[![Tests](https://img.shields.io/badge/tests-300%20passing-brightgreen.svg)](https://github.com/Ishita-Kulkarni/final_project)
 [![Docker](https://img.shields.io/badge/Docker-Enabled-blue.svg)](https://www.docker.com/)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15-blue.svg)](https://www.postgresql.org/)
 [![JWT](https://img.shields.io/badge/JWT-Authentication-orange.svg)](https://jwt.io/)
-[![Playwright](https://img.shields.io/badge/Playwright-1.57.0-45ba4b.svg)](https://playwright.dev/)
+[![Playwright](https://img.shields.io/badge/Playwright-E2E%20Tests-45ba4b.svg)](https://playwright.dev/)
 
-A production-ready FastAPI calculator application featuring **complete BREAD (Browse, Read, Edit, Add, Delete) operations**, **JWT authentication**, **comprehensive front-end interface for calculation management**, **72 E2E tests with Playwright**, and automated CI/CD pipeline with Docker Hub deployment.
+A production-ready FastAPI calculator application featuring **8 advanced mathematical operations** (including power, modulus, square root, nth root), **complete BREAD (Browse, Read, Edit, Add, Delete) operations**, **JWT authentication**, **comprehensive front-end interfaces**, **300+ tests**, and automated CI/CD pipeline with Docker Hub deployment.
 
 ## 🔗 Quick Links
 
-- **GitHub Repository**: https://github.com/Ishita-Kulkarni/assignment14
+- **GitHub Repository**: https://github.com/Ishita-Kulkarni/final_project
 - **API Documentation**: http://localhost:8000/docs (when running locally)
-- **CI/CD Pipeline**: https://github.com/Ishita-Kulkarni/assignment14/actions
+- **Calculator Interface**: http://localhost:8000/calculator (when running locally)
 - **Calculations Dashboard**: http://localhost:8000/static/calculations.html (when running locally)
+- **CI/CD Pipeline**: https://github.com/Ishita-Kulkarni/final_project/actions
 
-## ✨ What's New in Assignment 14
+## ✨ New Features - Advanced Calculator Operations
 
-This project builds upon assignment13 with major enhancements focused on **complete BREAD operations** for calculations with a comprehensive front-end interface:
+This project implements **4 additional advanced mathematical operations** beyond basic arithmetic:
 
-### 🧮 **Full BREAD Operations for Calculations**
+### 🔢 **Advanced Mathematical Operations**
+1. **Power (Exponentiation)**: `a^b` - Raise a number to a power
+   - Supports negative exponents: `2^-1 = 0.5`
+   - Handles zero exponents: `10^0 = 1`
+   - Overflow protection for large results
+   
+2. **Modulus (Remainder)**: `a % b` - Find remainder after division
+   - Handles decimal operands
+   - Prevents modulus by zero
+   
+3. **Square Root**: `√a` - Calculate square root
+   - Single operand operation
+   - Prevents negative number inputs
+   - Returns precise decimal results
+   
+4. **Nth Root**: `ⁿ√a` - Calculate nth root of a number
+   - Cube root: `³√27 = 3`
+   - Fourth root: `⁴√16 = 2`
+   - Supports odd roots of negative numbers: `³√-8 = -2`
+   - Prevents even roots of negative numbers
+   - Validates root degree (n ≠ 0)
+
+### 🧮 **Complete Calculator Features**
+- **8 Total Operations**: add, subtract, multiply, divide, power, modulus, square_root, nth_root
+- **Smart UI**: Dynamic input fields (num2 disabled for square_root)
+- **Helper Text**: Operation-specific guidance
+- **Mathematical Notation**: Special symbols (√, ⁿ√, ^, %)
+- **Error Handling**: Comprehensive validation for all edge cases
+### 🧮 **Complete BREAD Operations for Calculations**
 - **Browse**: View all user-specific calculations with pagination
 - **Read**: View detailed calculation information in modal dialogs
-- **Edit**: Update existing calculations with automatic result recalculation
-- **Add**: Create new calculations with all four operations (add, subtract, multiply, divide)
+- **Edit**: Update existing calculations with automatic result recalculation (all 8 operations)
+- **Add**: Create new calculations with all 8 operations
 - **Delete**: Remove calculations with confirmation dialogs
 
-### 🎨 **Comprehensive Calculations Dashboard**
-- **`calculations.html`**: Full-featured calculation management interface (743 lines)
-- Real-time calculation display with dynamic updates
-- Modal dialogs for viewing, creating, and editing calculations
-- Client-side validation (numeric checks, division by zero, required fields)
-- User-specific data isolation (users only see their own calculations)
-- Responsive design with professional UI/UX
-- Automatic JWT token handling with logout functionality
+### 🎨 **Comprehensive Front-End Interfaces**
+- **`index.html`**: Interactive calculator with 8 operations (425 lines)
+  - Real-time calculation with all operations
+  - Smart form controls (conditional num2 field)
+  - Operation-specific helper text
+  - Mathematical notation display
+  - Client-side validation
+  
+- **`calculations.html`**: Full-featured calculation management dashboard (743 lines)
+  - Real-time calculation display with dynamic updates
+  - Modal dialogs for viewing, creating, and editing
+  - Client-side validation (numeric checks, division by zero, required fields)
+  - User-specific data isolation
+  - Responsive design with professional UI/UX
+  - Automatic JWT token handling with logout functionality
 
-### 🧪 **Comprehensive E2E Testing with Playwright**
-- **72 Playwright E2E tests** (31 calculations + 26 login + 15 registration)
-- TypeScript-based test suite (`tests/e2e/*.spec.ts`)
-- **Calculations Tests (31 tests)**:
-  - Browse operations (empty state, list display, ordering)
-  - Read operations (modal display, field visibility)
-  - Add operations (all four operations, decimals, negatives)
-  - Edit operations (update calculations, partial updates)
-  - Delete operations (confirmation, cancellation)
-  - Negative scenarios (division by zero, validation, auth)
-  - User isolation verification
-  - UI/UX testing (navigation, logout)
-- Positive & negative test scenarios
-- UI state verification
-- Server response validation
-- Token storage verification
+### 🧪 **Comprehensive Testing Suite**
+- **300 total tests** (75 unit + 103 integration + 122 E2E)
+- **Unit Tests** (`tests/test_*.py`):
+  - Operations testing (all 8 operations with edge cases)
+  - Schema validation (Pydantic models)
+  - Authentication (bcrypt, JWT)
+  - Factory pattern implementation
+  
+- **Integration Tests** (`tests/test_*_api.py`):
+  - API endpoint testing
+  - Database operations
+  - User authentication flows
+  
+- **E2E Tests** (`tests/e2e/*.spec.ts` - TypeScript/Playwright):
+  - **Calculator Tests (37 tests)**: All 8 operations, input validation, UI state
+  - **Calculations CRUD Tests (31 tests)**: Browse, Read, Edit, Add, Delete operations
+  - **Login Tests (26 tests)**: Authentication flow, token storage, validation
+  - **Registration Tests (15 tests)**: User signup, validation, password strength
 
 ### 🔐 **Enhanced JWT Authentication**
 - Complete authentication flow (register → login → protected routes)
@@ -64,12 +102,13 @@ This project builds upon assignment13 with major enhancements focused on **compl
 - Remember Me functionality
 
 ### 🚀 **Production-Ready CI/CD**
-- **275 total tests** (234 unit + 41 E2E)
-- Multi-job pipeline (unit tests → E2E tests → Docker build → Docker push)
+- **300 total tests** (75 unit + 103 integration + 122 E2E)
+- **4-stage pipeline**: unit tests → E2E tests → Docker build → Docker push
 - PostgreSQL service containers in CI
-- Automated Docker Hub deployment
+- Automated Docker Hub deployment on main branch
 - Python 3.11 & 3.12 matrix testing
-- Comprehensive test reporting
+- Comprehensive test reporting with coverage
+- E2E tests with Playwright in headless mode
 
 ## 📋 Features
 
@@ -110,43 +149,61 @@ This project builds upon assignment13 with major enhancements focused on **compl
 - ✅ Input sanitization and validation
 - ✅ SQL injection prevention via SQLAlchemy
 
-### 🧮 Calculator API (Legacy Feature)
+### 🧮 Calculator Features
 
-- ✅ Basic arithmetic operations (add, subtract, multiply, divide)
-- ✅ User-specific calculation history
-- ✅ BREAD operations (Browse, Read, Edit, Add, Delete)
-- ✅ Division by zero validation
-- ✅ Calculation persistence
+**8 Mathematical Operations:**
+- ✅ **Basic**: Add, Subtract, Multiply, Divide
+- ✅ **Power**: Exponentiation with negative/zero exponent support
+- ✅ **Modulus**: Remainder after division
+- ✅ **Square Root**: Single operand, negative number validation
+- ✅ **Nth Root**: Cube root, fourth root, odd/even root handling
 
-### ✅ Testing & Quality (72 E2E Tests)
+**Calculation Management (BREAD):**
+- ✅ Browse: View all user-specific calculations with pagination
+- ✅ Read: Detailed calculation view in modal dialogs
+- ✅ Edit: Update calculations with automatic result recalculation
+- ✅ Add: Create calculations with all 8 operations
+- ✅ Delete: Remove calculations with confirmation
+- ✅ User-specific data isolation
+- ✅ Calculation persistence in database
 
-**E2E Tests with Playwright (72 tests):**
-- ✅ **Calculations Tests (31 tests)**:
-  - Browse: Empty state, list display, ordering, pagination
-  - Read: Modal display, field visibility, close functionality
-  - Add: All operations (add, subtract, multiply, divide), decimals, negatives
-  - Edit: Update calculations, partial updates, UI changes
-  - Delete: Successful deletion, confirmation dialogs, cancellation
-  - Negative: Division by zero, invalid inputs, unauthorized access
-  - Isolation: User-specific data verification
-  - UI/UX: Navigation, logout, display formatting
+### ✅ Testing & Quality (300+ Tests)
+
+**Unit Tests (75 tests):**
+- ✅ All 8 operations with edge cases
+- ✅ Pydantic schema validation
+- ✅ Authentication (bcrypt, JWT)
+- ✅ Factory pattern implementation
+- ✅ Custom exception handling
+
+**Integration Tests (103 tests):**
+- ✅ API endpoint testing (BREAD operations)
+- ✅ Database operations and transactions
+- ✅ User authentication flows
+- ✅ Error handling and validation
+
+**E2E Tests with Playwright (122 tests):**
+- ✅ **Calculator Tests (37 tests)**: 
+  - All 8 operations (power, modulus, square_root, nth_root)
+  - Input validation and error handling
+  - UI state management and helper text
+  
+- ✅ **Calculations CRUD Tests (31 tests)**:
+  - Browse, Read, Edit, Add, Delete operations
+  - User isolation and authorization
+  - Modal interactions and UI feedback
   
 - ✅ **Login Tests (26 tests)**:
-  - Positive: Valid credentials, email login, token storage, redirects
-  - Negative: Empty fields, wrong password, invalid user, network errors
-  - UI/UX: Form labels, placeholders, links, forgot password
+  - Valid/invalid credentials, token storage, redirects
   
 - ✅ **Registration Tests (15 tests)**:
-  - Positive: Valid data, email formats, password strength, redirects
-  - Negative: Short username/password, invalid email, duplicates
-  - Validation: Client-side and server-side error handling
+  - Validation, password strength, duplicate handling
 
 **Test Coverage:**
-- ✅ All positive test cases
-- ✅ All negative test cases
+- ✅ 86% code coverage on app module
+- ✅ All positive and negative test cases
 - ✅ Error scenarios (400, 401, 403, 404, 422)
 - ✅ UI state verification
-- ✅ Token storage verification
 - ✅ Database verification
 
 ### 🐳 Docker & Database
@@ -174,6 +231,87 @@ This project builds upon assignment13 with major enhancements focused on **compl
 - ✅ Multi-Python version testing
 - ✅ Automated deployment to Docker Hub
 - ✅ Comprehensive workflow summary
+
+## 📁 Project Structure
+
+```
+final_project/
+├── app/                              # Main application package
+│   ├── __init__.py
+│   ├── main.py                       # FastAPI application & routes
+│   ├── database.py                   # Database configuration
+│   ├── models.py                     # SQLAlchemy models (User, Calculation)
+│   ├── schemas.py                    # Pydantic schemas & validation
+│   ├── auth.py                       # JWT authentication utilities
+│   ├── users.py                      # User management router
+│   ├── calculations.py               # Calculations BREAD router
+│   ├── operations.py                 # 8 mathematical operations
+│   ├── calculation_factory.py        # Factory pattern implementation
+│   └── logger_config.py              # Logging configuration
+│
+├── static/                           # Frontend HTML pages
+│   ├── index.html                    # Interactive calculator (425 lines)
+│   ├── calculations.html             # CRUD dashboard (743 lines)
+│   ├── login.html                    # Login page
+│   └── register.html                 # Registration page
+│
+├── tests/                            # Test suite (300+ tests)
+│   ├── test_auth.py                  # Authentication unit tests
+│   ├── test_operations.py            # Operations unit tests (8 ops)
+│   ├── test_schemas.py               # Schema validation tests
+│   ├── test_models.py                # Database model tests
+│   ├── test_calculations.py          # Calculation logic tests
+│   ├── test_calculations_api.py      # Calculations API integration tests
+│   ├── test_users.py                 # User API integration tests
+│   ├── test_main.py                  # Main endpoint tests
+│   ├── test_logging.py               # Logging tests
+│   ├── e2e/                          # End-to-end tests (Playwright)
+│   │   ├── calculator.spec.ts        # Calculator UI tests (37 tests)
+│   │   ├── calculations.spec.ts      # CRUD operations tests (31 tests)
+│   │   ├── login.spec.ts             # Login flow tests (26 tests)
+│   │   └── register.spec.ts          # Registration tests (15 tests)
+│   ├── E2E_TESTING.md               # E2E testing documentation
+│   └── README.md                     # Testing guide
+│
+├── scripts/                          # Utility scripts
+│   ├── ci_check.sh                   # CI validation script
+│   ├── run_tests.sh                  # Test runner
+│   └── setup-tests.sh                # Test environment setup
+│
+├── docs/                             # Documentation
+│   ├── JWT_AUTHENTICATION.md         # JWT implementation guide
+│   ├── FRONTEND_AUTHENTICATION.md    # Frontend auth flows
+│   ├── LOGGING.md                    # Logging documentation
+│   ├── CI_CD_PIPELINE.md             # Pipeline documentation
+│   ├── CI_CD_SETUP.md                # CI/CD setup guide
+│   ├── QUICK_REFERENCE.md            # Quick reference
+│   └── SETUP_CHECKLIST.md            # Setup checklist
+│
+├── examples/                         # Example scripts
+│   ├── demo_user_endpoints.py        # User API demo
+│   ├── calculations_api.py           # Calculations API demo
+│   ├── test_jwt_token.py             # JWT testing demo
+│   ├── factory_usage_examples.py     # Factory pattern examples
+│   └── test_api_manual.py            # Manual API testing
+│
+├── .github/workflows/                # GitHub Actions CI/CD
+│   └── ci-cd-e2e.yml                 # 4-stage pipeline
+│
+├── logs/                             # Application logs
+│   ├── app.log                       # General application logs
+│   └── error.log                     # Error logs
+│
+├── Dockerfile                        # Multi-stage Docker build
+├── docker-compose.yml                # Docker services (FastAPI + PostgreSQL)
+├── pyproject.toml                    # Python project config & pytest
+├── playwright.config.ts              # Playwright E2E config
+├── package.json                      # Node.js dependencies (Playwright)
+├── requirements.txt                  # Python dependencies
+├── requirements-test.txt             # Test dependencies
+├── .env.example                      # Environment variables template
+├── .gitignore                        # Git ignore patterns
+└── README.md                         # This file
+```
 
 ## 🚀 Quick Start
 
@@ -223,11 +361,12 @@ uvicorn app.main:app --reload
 ```
 
 7. **Access the application:**
-   - API Docs: http://localhost:8000/docs
-   - Register Page: http://localhost:8000/static/register.html
-   - Login Page: http://localhost:8000/static/login.html
-   - Calculations Dashboard: http://localhost:8000/static/calculations.html
-   - Health Check: http://localhost:8000/health
+   - **Calculator**: http://localhost:8000/calculator
+   - **API Docs**: http://localhost:8000/docs
+   - **Login Page**: http://localhost:8000 (root redirects to login)
+   - **Register Page**: http://localhost:8000/static/register.html
+   - **Calculations Dashboard**: http://localhost:8000/static/calculations.html (requires auth)
+   - **Health Check**: http://localhost:8000/health
 
 ### Quick Start with Docker
 
@@ -241,23 +380,35 @@ open http://localhost:8000/docs
 
 ## 🧪 Running Tests
 
-### Run All Tests (72 E2E tests)
+### Run All Tests (300+ tests)
 
 ```bash
-# Run E2E tests (72 tests)
+# Run Python unit & integration tests (178 tests)
+pytest tests/ --ignore=tests/e2e -v
+
+# Run E2E tests (122 tests)
 npm test
 
-# Run E2E tests with UI
-npx playwright test --ui
-
-# Run specific test file
-npx playwright test tests/e2e/calculations.spec.ts
+# Run all tests
+pytest tests/ --ignore=tests/e2e && npm test
 ```
 
 ### Run Specific Test Suites
 
 ```bash
-# E2E calculations tests (31 tests)
+# Unit tests only
+pytest tests/test_operations.py -v  # 8 operations tests
+pytest tests/test_auth.py -v        # Authentication tests
+pytest tests/test_schemas.py -v     # Schema validation tests
+
+# Integration tests
+pytest tests/test_calculations_api.py -v  # Calculations API
+pytest tests/test_users.py -v             # User API
+
+# E2E calculator tests (37 tests - all 8 operations)
+npx playwright test tests/e2e/calculator.spec.ts
+
+# E2E calculations CRUD tests (31 tests)
 npx playwright test tests/e2e/calculations.spec.ts
 
 # E2E login tests (26 tests)
@@ -277,13 +428,25 @@ pytest tests/ --cov=app --cov-report=html --cov-report=term-missing --ignore=tes
 open htmlcov/index.html
 ```
 
+### Run Tests with Playwright UI
+
+```bash
+# Run E2E tests with interactive UI
+npx playwright test --ui
+
+# Run specific test file with UI
+npx playwright test tests/e2e/calculator.spec.ts --ui
+```
+
 ### Expected Test Results
 
 ```
-✅ 72 E2E tests passing
-   - 31 calculations tests
-   - 26 login tests
-   - 15 registration tests
+✅ 300 total tests passing:
+   - 75 unit tests (operations, auth, schemas, models, etc.)
+   - 103 integration tests (API endpoints, database)
+   - 122 E2E tests (calculator, calculations CRUD, login, registration)
+   
+✅ 86% code coverage on app module
 ```
 
 ## 📖 API Documentation
@@ -734,20 +897,23 @@ This project is created for educational purposes as part of a university assignm
 ## 📞 Support
 
 For issues or questions:
-- Open an issue on [GitHub](https://github.com/Ishita-Kulkarni/assignment14/issues)
+- Open an issue on [GitHub](https://github.com/Ishita-Kulkarni/final_project/issues)
 - Check the API documentation at http://localhost:8000/docs
 - Review existing test examples in `tests/e2e/`
+- Read the documentation in `docs/` folder
 
 ## 📈 Project Stats
 
-- **Total E2E Tests**: 72 (31 calculations + 26 login + 15 registration)
-- **Test Coverage**: Comprehensive frontend E2E coverage
-- **Lines of Code**: ~6000+ (including 743-line calculations.html)
-- **CI/CD Jobs**: 4 automated jobs
+- **Total Tests**: 300+ (75 unit + 103 integration + 122 E2E)
+- **Test Coverage**: 86% on app module
+- **Mathematical Operations**: 8 (add, subtract, multiply, divide, power, modulus, square_root, nth_root)
+- **Lines of Code**: ~7500+ (including test suite)
+- **CI/CD Jobs**: 4 automated stages
 - **Supported Python Versions**: 3.11, 3.12
-- **Supported Browsers**: Chromium, Firefox, WebKit (local), Chromium (CI)
-- **Database**: SQLite (development), PostgreSQL (production)
+- **Supported Browsers**: Chromium (CI), Chromium/Firefox/WebKit (local)
+- **Database**: SQLite (development), PostgreSQL 15 (production)
+- **Front-End Pages**: 4 (calculator, calculations dashboard, login, register)
 
 ---
 
-**Built with ❤️ for Assignment 14**
+**Built with ❤️ for Advanced Calculator Project**
